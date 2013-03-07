@@ -1,0 +1,4 @@
+.build/
+Plack-Middleware-PathToQuery-*.tar.gz
+Plack-Middleware-PathToQuery-*/
+*.BAK
