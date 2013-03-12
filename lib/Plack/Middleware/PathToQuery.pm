@@ -28,7 +28,7 @@ sub call
 			if($component =~ s/^([^-]+)-//) {
 				push @pairs, uri_escape($1).'='.uri_escape($component);
 			} else {
-				push @pairs, uri_escape($component);
+				push @pairs, uri_escape($component).'=';
 			}
 		}
 		push @pairs, $env->{QUERY_STRING} if $env->{QUERY_STRING} ne '';
