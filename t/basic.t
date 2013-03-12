@@ -19,7 +19,16 @@ my $app = Plack::Middleware::PathToQuery->wrap(sub {
 });
 
 my @case = (
-	['/', { keys => [], parameters => {} } ],
+	['/',                     { keys => [],                   parameters => {} } ],
+	['/key1',                 { keys => [qw(key1)],           parameters => { key1 => '' } } ],
+	['/key1/',                { keys => [qw(key1)],           parameters => { key1 => '' } } ],
+	['/key1/key2',            { keys => [qw(key1 key2)],      parameters => { key1 => '', key2 => '' } } ],
+	['/key1/key2/',           { keys => [qw(key1 key2)],      parameters => { key1 => '', key2 => '' } } ],
+	['/key-2/key-1',          { keys => [qw(key key)],        parameters => { key => [2, 1] } } ],
+	['/key-2/key-1?key=3',    { keys => [qw(key key key)],    parameters => { key => [2, 1, 3] } } ],
+	['/key1-2/key2-1?key3=3', { keys => [qw(key1 key2 key3)], parameters => { key1 => 2, key2 => 1, key3 => 3 } } ],
+	['/key1-2-3/key2',        { keys => [qw(key1 key2)],      parameters => { key1 => '2-3', key2 => '' } } ],
+	['/key1-2%2fkey1/key2',   { keys => [qw(key1 key1 key2)], parameters => { key1 => [2, ''], key2 => '' } } ],
 );
 plan tests => @case * 2;
 
