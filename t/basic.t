@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 2;
+use Test::More;
 use Plack::Test;
 use Plack::Request;
 use JSON;
@@ -18,11 +18,18 @@ my $app = Plack::Middleware::PathToQuery->wrap(sub {
 	})]];
 });
 
-test_psgi
-	app => $app,
-	client => sub {
-		my $cb = shift;
-		my $res = $cb->(GET '/');
-		is $res->code, 200;
-		is_deeply decode_json($res->content), { keys => [], parameters => {} };
-	};
+my @case = (
+	['/', { keys => [], parameters => {} } ],
+);
+plan tests => @case * 2;
+
+foreach my $case (@case) {
+	test_psgi
+		app => $app,
+		client => sub {
+			my $cb = shift;
+			my $res = $cb->(GET $case->[0]);
+			is $res->code, 200;
+			is_deeply decode_json($res->content), $case->[1];
+		};
+}
